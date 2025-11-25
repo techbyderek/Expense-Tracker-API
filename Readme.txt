@@ -331,7 +331,7 @@ expenseapi/
 
 ## Author
 
-Derek Rolon - Uplift Code Camp Batch 27
+Derek Rolon
 
 ## License
 
