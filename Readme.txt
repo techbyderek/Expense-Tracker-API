@@ -1,338 +1,234 @@
-# Expense Tracker API
+<div align="center">
 
-RESTful API for managing personal expenses with user authentication, CRUD operations, category filtering, and soft delete functionality.
+# 💰 DebtFree Tracker
 
-## Technologies
+### AI-Powered Debt Management Web Application
 
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **MongoDB** - NoSQL database
-- **Mongoose** - ODM for MongoDB
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
-- **Helmet** - Security headers
-- **CORS** - Cross-origin resource sharing
-- **dotenv** - Environment variables
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![Gemini AI](https://img.shields.io/badge/Gemini_AI-8E75B2?style=flat-square&logo=google&logoColor=white)](https://ai.google.dev/)
+[![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=flat-square&logo=netlify&logoColor=white)](https://www.netlify.com/)
 
-## Features
+**Take control of your finances. Track debts, get smart payment recommendations, and build savings.**
 
-- User authentication (register/login)
-- JWT-based authorization
-- CRUD operations for expenses
-- Filter expenses by category
-- Soft delete (expenses marked as deleted, not removed)
-- Input validation with Mongoose
-- Password hashing with bcrypt
-- Secure HTTP headers with Helmet
-- Each user sees only their own expenses
+</div>
 
-## Installation
+---
+
+## 📖 About
+
+**DebtFree Tracker** is a full-featured web application that helps users manage multiple debts with AI-powered payment strategies. Built with vanilla JavaScript and integrated with Google Gemini AI, it provides personalized financial recommendations to help users become debt-free faster.
+
+### Why DebtFree Tracker?
+
+- 🎯 **Smart Prioritization** - AI analyzes your debts and suggests optimal payment strategies
+- 💰 **Budget Friendly** - Automatically calculates available funds after savings
+- 📊 **Clear Overview** - Visual dashboard shows your complete financial picture
+- 🔒 **Privacy First** - All data stored locally in your browser
+- 📱 **Fully Responsive** - Works seamlessly on desktop, tablet, and mobile
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🔐 Smart Onboarding
+- Multi-step guided setup
+- Income & savings configuration
+- Pay frequency scheduling
+- Progress tracking
+
+</td>
+<td width="50%">
+
+### 💳 Debt Management
+- Add/Edit/Delete debts
+- Track amounts & due dates
+- Budget validation warnings
+- Full CRUD operations
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🤖 AI Recommendations
+- Google Gemini integration
+- Personalized strategies
+- Priority-based ordering
+- Intelligent fallback system
+
+</td>
+<td width="50%">
+
+### 📊 Financial Dashboard
+- Real-time summary
+- Monthly breakdown
+- Balance calculator
+- Payday tracking
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🛠️ Built With
+
+- **Frontend**: Vanilla JavaScript, HTML5, CSS3
+- **AI Integration**: Google Gemini AI API
+- **Storage**: LocalStorage API
+- **Functions**: Netlify Serverless Functions
+- **Deployment**: Netlify
+- **Version Control**: Git & GitHub
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB (local or Atlas)
 
-### Steps
+- A modern web browser (Chrome, Firefox, Safari, Edge)
+- A text editor (VS Code recommended)
+- Git installed on your machine
+- A Google Gemini API key ([Get one here](https://ai.google.dev/))
 
-1. Clone the repository
+### Installation
+
+1. **Clone the repository**
 ```bash
-git clone <repository-url>
-cd expenseapi
+   git clone https://github.com/yourusername/debtfree-tracker.git
+   cd debtfree-tracker
 ```
 
-2. Install dependencies
+2. **Create your config file**
 ```bash
-npm install
+   cp config.example.js config.js
 ```
 
-3. Create `.env` file in root directory
-```env
-MONGODB_URI=mongodb://localhost:27017/expense-tracker
-PORT=3000
-JWT_SECRET=your-super-secret-jwt-key
-```
-
-4. Start the server
-```bash
-node server.js
-```
-
-Server runs on `http://localhost:3000`
-
-## API Endpoints
-
-### Authentication
-
-#### Register User
-```http
-POST /api/v1/auth/register
-Content-Type: application/json
-
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "123456"
-}
-```
-
-**Response (201):**
-```json
-{
-  "success": true,
-  "data": {
-    "user": {
-      "id": "...",
-      "name": "John Doe",
-      "email": "john@example.com"
-    },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  }
-}
-```
-
-#### Login
-```http
-POST /api/v1/auth/login
-Content-Type: application/json
-
-{
-  "email": "john@example.com",
-  "password": "123456"
-}
-```
-
-**Response (200):**
-```json
-{
-  "success": true,
-  "data": {
-    "user": {
-      "id": "...",
-      "name": "John Doe",
-      "email": "john@example.com"
-    },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  }
-}
-```
-
-#### Get Current User
-```http
-GET /api/v1/auth/me
-Authorization: Bearer <token>
-```
-
-**Response (200):**
-```json
-{
-  "success": true,
-  "data": {
-    "id": "...",
-    "name": "John Doe",
-    "email": "john@example.com"
-  }
-}
-```
-
-### Expenses (All require authentication)
-
-**Note:** All expense endpoints require the `Authorization` header with Bearer token.
-
-#### Create Expense
-```http
-POST /api/v1/expenses
-Authorization: Bearer <token>
-Content-Type: application/json
-
-{
-  "amount": 50,
-  "description": "Lunch at restaurant",
-  "category": "Food",
-  "paymentMethod": "Credit Card"
-}
-```
-
-**Response (201):**
-```json
-{
-  "success": true,
-  "data": {
-    "_id": "...",
-    "userId": "...",
-    "amount": 50,
-    "description": "Lunch at restaurant",
-    "category": "Food",
-    "paymentMethod": "Credit Card",
-    "date": "2024-11-24T...",
-    "isDeleted": false,
-    "createdAt": "2024-11-24T...",
-    "updatedAt": "2024-11-24T..."
-  }
-}
-```
-
-#### Get All Expenses
-```http
-GET /api/v1/expenses
-Authorization: Bearer <token>
-```
-
-**Response (200):**
-```json
-{
-  "success": true,
-  "count": 2,
-  "data": [
-    {
-      "_id": "...",
-      "userId": "...",
-      "amount": 50,
-      "category": "Food",
-      ...
-    }
-  ]
-}
-```
-
-#### Filter Expenses by Category
-```http
-GET /api/v1/expenses?category=Food
-Authorization: Bearer <token>
-```
-
-**Response (200):** Returns only expenses with category "Food"
-
-#### Update Expense
-```http
-PATCH /api/v1/expenses/:id
-Authorization: Bearer <token>
-Content-Type: application/json
-
-{
-  "amount": 75,
-  "description": "Updated description"
-}
-```
-
-**Response (200):**
-```json
-{
-  "success": true,
-  "data": {
-    "_id": "...",
-    "amount": 75,
-    "description": "Updated description",
-    ...
-  }
-}
-```
-
-#### Delete Expense (Soft Delete)
-```http
-DELETE /api/v1/expenses/:id
-Authorization: Bearer <token>
-```
-
-**Response (200):**
-```json
-{
-  "success": true,
-  "data": {}
-}
-```
-
-**Note:** Expense is not permanently deleted. It's marked as `isDeleted: true` and won't appear in GET requests.
-
-## Data Models
-
-### User Schema
+3. **Add your API key**
+   
+   Open `config.js` and replace with your actual Gemini API key:
 ```javascript
-{
-  name: String (required),
-  email: String (required, unique),
-  password: String (required, hashed),
-  createdAt: Date,
-  updatedAt: Date
-}
+   export const GEMINI_API_KEY = 'your-actual-api-key-here';
 ```
 
-### Expense Schema
-```javascript
-{
-  userId: ObjectId (required, ref: User),
-  amount: Number (required, min: 0),
-  description: String (optional),
-  category: String (required, enum: ['Food', 'Transportation', 'Entertainment', 'Bills', 'Other']),
-  date: Date (required, default: now),
-  paymentMethod: String (optional, enum: ['Cash', 'Credit Card', 'Debit Card']),
-  isDeleted: Boolean (default: false),
-  createdAt: Date,
-  updatedAt: Date
-}
+4. **Open in browser**
+   
+   Simply open `index.html` in your browser or use a local server:
+```bash
+   # Using Python
+   python -m http.server 8000
+   
+   # Using Node.js
+   npx serve
 ```
 
-## Error Handling
+5. **Visit** `http://localhost:8000`
 
-The API uses standard HTTP status codes:
+---
 
-- `200` - OK (successful GET, PATCH, DELETE)
-- `201` - Created (successful POST)
-- `400` - Bad Request (invalid data)
-- `401` - Unauthorized (missing/invalid token)
-- `404` - Not Found (resource doesn't exist)
-- `500` - Server Error
+## 📱 Usage
 
-Example error response:
-```json
-{
-  "success": false,
-  "error": "Error message here"
-}
+### 1️⃣ Create Your Account
+Start by creating your profile with basic information.
+
+### 2️⃣ Complete Onboarding
+- Enter your monthly income
+- Set your pay frequency and next payday
+- Choose your savings percentage (10-20% recommended)
+
+### 3️⃣ Add Your Debts
+- Click "Add Debt" to start tracking
+- Enter debt name, amount, minimum payment, and due date
+- Edit or delete debts anytime
+
+### 4️⃣ Get AI Recommendations
+- Navigate to "Payment Plans" section
+- AI analyzes your financial situation
+- Receive personalized debt repayment strategies
+
+### 5️⃣ Track Your Progress
+Monitor your financial health through the dashboard sidebar.
+
+---
+
+## 📂 Project Structure
+```
+debtfree-tracker/
+├── 📁 blog/
+│   └── blog.css                 # Blog-specific styles
+├── 📄 .gitignore                # Git ignore rules
+├── 📄 config.example.js         # API key template
+├── 📄 index.html                # Main HTML file
+├── 📄 netlify.toml              # Netlify configuration
+├── 📄 README.md                 # You are here!
+├── 📄 script.js                 # Main JavaScript logic
+└── 📄 styles.css                # Main stylesheet
 ```
 
-## Security
+---
 
-- Passwords hashed with bcrypt (10 rounds)
-- JWT tokens expire after 7 days
-- Protected routes require valid JWT token
-- Users can only access their own expenses
-- Helmet.js for secure HTTP headers
-- CORS enabled for cross-origin requests
+## 🗺️ Roadmap
 
-## Project Structure
-```
-expenseapi/
-├── controllers/
-│   ├── authController.js
-│   └── expenseController.js
-├── middleware/
-│   └── auth.js
-├── models/
-│   ├── User.js
-│   └── Expense.js
-├── routes/
-│   ├── authRoutes.js
-│   └── expensesRoutes.js
-├── .env
-├── .gitignore
-├── package.json
-├── README.md
-└── server.js
-```
+- [x] Core debt tracking functionality
+- [x] AI-powered payment recommendations
+- [x] Responsive design
+- [x] Blog integration
 
-## Testing with Postman
+---
 
-1. **Register** a new user → Get token
-2. **Login** with credentials → Get token
-3. Copy the token from response
-4. For all expense endpoints:
-   - Add header: `Authorization: Bearer <your-token>`
-   - Make requests
+## 🤝 Contributing
 
-## Author
+Contributions make the open-source community amazing! Any contributions you make are **greatly appreciated**.
 
-Derek Rolon
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## License
+---
 
-This project is for educational purposes.
+## 🔒 Security
+
+- **Never commit `config.js`** - This file contains your API key
+- API keys are secured via Netlify Functions
+- All data stored locally in browser (no server-side storage)
+
+---
+
+## 📝 License
+
+This project is part of the Bootcamp
+
+---
+
+## 👤 Author
+
+**Derek Rolon**
+
+---
+
+## 🙏 Acknowledgments
+
+- [Uplift Code Camp](https://uplift.codes/) - Batch 27
+- [Google Gemini AI](https://ai.google.dev/) - AI Integration
+- [Netlify](https://netlify.com) - Hosting & Serverless Functions
+- Inspiration from modern fintech applications
+
+---
+
+<div align="center">
+
+**⭐ Star this repo if you found it helpful!**
+
+Made with ❤️ by [Derek Rolon](https://github.com/techbyderek)
+
+[Back to top ↑]
+
+</div>****
