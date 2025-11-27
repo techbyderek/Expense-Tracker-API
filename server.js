@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
+const { specs, swaggerUi } = require('./swagger');
 require('dotenv').config();
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use('/api/v1/expenses', expensesRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connected'))
